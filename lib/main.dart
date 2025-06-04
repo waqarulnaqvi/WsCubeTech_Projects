@@ -1,18 +1,23 @@
-import 'package:expense_app_bloc/features/onboarding/pages/last_page.dart';
+import 'package:expense_app_bloc/core/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'core/local/db_helper.dart';
+import 'features/authentication/viewmodel/bloc/user_bloc.dart';
 
 void main() {
- SystemChrome.setSystemUIOverlayStyle(
+  SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,
       systemNavigationBarColor: Colors.white,
       systemNavigationBarIconBrightness: Brightness.dark,
     ),
- );
+  );
 
-  runApp(const MyApp());
+  runApp(MultiBlocProvider(providers: [
+    BlocProvider(create: (_) => UserBloc(dbHelper: DBHelper())),
+  ], child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -23,12 +28,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Expense App',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: LastPage(),
+      initialRoute: AppRoutes.firstPageRoute,
+      routes: AppRoutes.mRoutes,
+      // home: OnboardingPage(),
     );
   }
 }

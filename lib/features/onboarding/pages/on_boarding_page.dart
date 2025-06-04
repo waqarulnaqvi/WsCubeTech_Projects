@@ -1,17 +1,18 @@
 import 'package:expense_app_bloc/core/constants/static_assets.dart';
 import 'package:expense_app_bloc/core/theme/app_styles.dart';
+import 'package:expense_app_bloc/features/authentication/pages/login_page.dart';
 import 'package:expense_app_bloc/features/onboarding/data/onboarding_contents.dart';
 import 'package:expense_app_bloc/shared/widget/global.dart';
 import 'package:flutter/material.dart';
 
-class LastPage extends StatefulWidget {
-  const LastPage({super.key});
+class OnboardingPage extends StatefulWidget {
+  const OnboardingPage({super.key});
 
   @override
-  State<LastPage> createState() => _LastPageState();
+  State<OnboardingPage> createState() => _OnboardingPageState();
 }
 
-class _LastPageState extends State<LastPage> {
+class _OnboardingPageState extends State<OnboardingPage> {
   PageController pageController = PageController();
   int currentIndex = 0;
 
@@ -124,6 +125,12 @@ class _LastPageState extends State<LastPage> {
             right: 10,
             child: IconButton(
                 onPressed: () {
+                  if(currentIndex == onboardingContents.length - 1) {
+                    // Navigate to the next page or perform an action
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=> LoginPage())); // Example route
+                    return;
+                  }
+                  
                   // currentIndex = (currentIndex + 1).clamp(0, onboardingContents.length - 1);
                   setState(() {
                     currentIndex = (currentIndex + 1).clamp(0, onboardingContents.length - 1);

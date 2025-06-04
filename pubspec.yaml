@@ -16,6 +16,8 @@ dependencies:
   path:
   icons_launcher:
   flutter_native_splash:
+  flutter_bloc: ^9.1.1
+  shared_preferences: ^2.5.3
 
 
 dev_dependencies:
@@ -25,11 +27,16 @@ dev_dependencies:
   flutter_lints: ^5.0.0
 
 flutter:
-  generate: true                      # This line tells flutter_gen to generate the files
-  uses-material-design: true          # This line tells Flutter to use Material Design
+  generate: true
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
 
+  # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
+    - assets/icon/
 
 flutter_native_splash:
   android: true
