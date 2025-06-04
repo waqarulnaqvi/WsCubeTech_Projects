@@ -16,6 +16,8 @@ class _AddExpensePageState extends State<AddExpensePage> {
   TextEditingController descriptionController = TextEditingController();
   TextEditingController amountController = TextEditingController();
   int selectedCatIndex=-1;
+  List<String> mExpType =["Debit","Credit"];
+  String selectedExpType = "Debit";
 
 
 
@@ -137,37 +139,36 @@ class _AddExpensePageState extends State<AddExpensePage> {
                       ),
                     ) :Text("Choose Category"))),
             spacerH(),
-            SizedBox(
-                height: 50,
-                width: double.infinity,
-                child: ElevatedButton(
-                    onPressed: () {
+          // DropdownButton(
+          //     value: selectedExpType,
+          //     items: mExpType.map((e)=>
+          // DropdownMenuItem(value: e,child: Text(e) , )
+          // ).toList(), onChanged: (value){
+          //       selectedExpType = value!;
+          //       setState(() {});
+          // }),
 
-                    },
-                    style: ElevatedButton.styleFrom(
-                        elevation: 0,
-                        backgroundColor: Colors.transparent,
-                        // overlayColor: Colors.transparent, // Remove overlay color means onClick changed Color
-                        shadowColor: Colors.transparent, // Remove shadow
-                        // splashFactory: NoSplash.splashFactory, // Remove ripple/splash effect
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(color: Colors.black, width: 1),
-                          borderRadius: BorderRadius.circular(10),
-                        )),
-                    // .copyWith(
-                    // overlayColor: MaterialStateProperty.all(Colors.transparent),
-                    // ),
-                    child: selectedCatIndex>=0 ?Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(AppConstants.mCat[selectedCatIndex]["catName"] + " - ",
-                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
-                          Image.asset(AppConstants.mCat[selectedCatIndex]["catImage"],width: 25,height: 25,),
-                        ],
-                      ),
-                    ) :Text("Select Type"))),
+            DropdownMenu(
+              width: double.infinity,
+                initialSelection: selectedExpType,
+                inputDecorationTheme: InputDecorationTheme(
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: Colors.black, width: 1),
+                  ),
+                  // border: OutlineInputBorder(
+                  //   borderRadius: BorderRadius.circular(10),
+                  //   borderSide: BorderSide(color: Colors.black, width: 1),
+                  // ),
+                ),
+                onSelected: (value) {
+                  selectedExpType = value!;
+                  // selfDefine setState to update the UI
+                  // setState(() {});
+                },
+                dropdownMenuEntries: mExpType.map((e)=>
+            DropdownMenuEntry(value: e, label: e)
+            ).toList()),
             spacerH(),
             SizedBox(
                 height: 50,
@@ -187,17 +188,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                     // .copyWith(
                     // overlayColor: MaterialStateProperty.all(Colors.transparent),
                     // ),
-                    child: selectedCatIndex>=0 ?Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(AppConstants.mCat[selectedCatIndex]["catName"] + " - ",
-                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
-                          Image.asset(AppConstants.mCat[selectedCatIndex]["catImage"],width: 25,height: 25,),
-                        ],
-                      ),
-                    ) :Text("Select Date"))),
+                    child: Text("Select Date"))),
             spacerH(),
             SizedBox(
                 height: 50,
