@@ -1,6 +1,5 @@
-
 import 'package:expense_app_bloc/core/constants/static_assets.dart';
-import 'package:expense_app_bloc/features/onboarding/model/onboarding_model.dart';
+import '../model/onboarding_model.dart';
 
 List<OnboardingModel> onboardingContents = [
   OnboardingModel(

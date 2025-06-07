@@ -134,10 +134,38 @@ class DBHelper {
 
     //get userId from shared preferences
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    int userId = prefs.getInt('userId')!;
+    int userId = prefs.getInt('userId') ?? 0;
     expense.userId = userId;
 
     int rowsAffected = await db.insert(tableExpense, expense.toMap());
+    return rowsAffected > 0;
+  }
+
+  ///update expense
+  Future<bool> updateExpense({required ExpenseModel expense}) async {
+    var db = await getDB();
+
+    //get userId from shared preferences
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int userId = prefs.getInt('userId') ?? 0;
+    expense.userId = userId;
+
+    int rowsAffected = await db.update(tableExpense, expense.toMap(),
+        where: "$columnExpenseId = ?", whereArgs: [expense.expenseId]);
+    return rowsAffected > 0;
+  }
+
+  ///deleteExpense
+  Future<bool> deleteExpense({required int expenseId}) async {
+    var db = await getDB();
+
+    //get userId from shared preferences
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int userId = prefs.getInt('userId')!;
+
+    int rowsAffected = await db.delete(tableExpense,
+        where: "$columnExpenseId = ? AND $columnUserId = ?",
+        whereArgs: [expenseId, userId]);
     return rowsAffected > 0;
   }
 
@@ -147,9 +175,9 @@ class DBHelper {
 
     //get userId from shared preferences
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    int userId = prefs.getInt('userId')!;
+    int userId = prefs.getInt('userId') ?? 0;
     List<Map<String, dynamic>> data =
-        await db.query(tableExpense, where: "$columnUserId = $userId");
+        await db.query(tableExpense, where: "$columnUserId = $userId", orderBy: "$columnCreatedAt DESC");
 
     if (data.isNotEmpty) {
       return data.map((e) => ExpenseModel.fromMap(e)).toList();

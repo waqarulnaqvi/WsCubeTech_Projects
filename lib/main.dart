@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/local/db_helper.dart';
 import 'features/authentication/viewmodel/bloc/user_bloc.dart';
+import 'features/home_page/view/viewmodel/bloc/expense_bloc.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(
@@ -17,6 +18,7 @@ void main() {
 
   runApp(MultiBlocProvider(providers: [
     BlocProvider(create: (_) => UserBloc(dbHelper: DBHelper())),
+    BlocProvider(create: (_) => ExpenseBloc(dbHelper: DBHelper())),
   ], child: MyApp()));
 }
 

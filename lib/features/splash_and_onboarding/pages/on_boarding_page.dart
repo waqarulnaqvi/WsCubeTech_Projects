@@ -1,9 +1,10 @@
 import 'package:expense_app_bloc/core/constants/static_assets.dart';
 import 'package:expense_app_bloc/core/theme/app_styles.dart';
 import 'package:expense_app_bloc/features/authentication/pages/login_page.dart';
-import 'package:expense_app_bloc/features/onboarding/data/onboarding_contents.dart';
 import 'package:expense_app_bloc/shared/widget/global.dart';
 import 'package:flutter/material.dart';
+
+import '../data/onboarding_contents.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});

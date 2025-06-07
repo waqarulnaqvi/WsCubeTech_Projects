@@ -1,12 +1,10 @@
-import 'package:expense_app_bloc/core/models/user_model.dart';
 import 'package:expense_app_bloc/core/theme/app_colors.dart';
 import 'package:expense_app_bloc/features/authentication/pages/sign_up_page.dart';
 import 'package:expense_app_bloc/features/authentication/viewmodel/bloc/user_bloc.dart';
 import 'package:expense_app_bloc/features/authentication/viewmodel/bloc/user_state.dart';
-import 'package:expense_app_bloc/features/onboarding/pages/on_boarding_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import '../../splash_and_onboarding/pages/on_boarding_page.dart';
 import '../viewmodel/bloc/user_event.dart';
 
 class LoginPage extends StatefulWidget {
@@ -56,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
               Text(
                 "Sign In and get started",
                 style: TextStyle(
-                    color: const Color.fromARGB(231, 255, 255, 255),
+                    color: Color.fromARGB(231, 255, 255, 255),
                     fontSize: 14,
                     fontWeight: FontWeight.w200),
               ),
@@ -231,7 +229,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: BlocConsumer<UserBloc, UserState>(
                             listener: (context, state) {
                               if (state is UserLoggedInState) {
-                                print("Hello world");
+                                // print("Hello world");
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(

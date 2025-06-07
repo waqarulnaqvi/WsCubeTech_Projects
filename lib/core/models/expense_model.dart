@@ -7,7 +7,7 @@ class ExpenseModel{
   final String description;
   final double amount;
   final double balance;
-  final String categoryId;
+  final int categoryId;
   final int type;
   final String createdAt;
 
@@ -44,7 +44,7 @@ class ExpenseModel{
       title: map[DBHelper.columnExpenseTitle] ?? '',
       amount: map[DBHelper.columnExpenseAmount] ?? 0.0,
       balance: map[DBHelper.columnExpenseBalance] ?? 0.0,
-      categoryId: map[DBHelper.columnExpenseCategoryId] ?? '',
+      categoryId: map[DBHelper.columnExpenseCategoryId] ?? 0,
       description: map[DBHelper.columnExpenseDesc] ?? '',
       type: map[DBHelper.columnExpenseType] ?? 0,
       createdAt: map[DBHelper.columnCreatedAt] ?? '',
