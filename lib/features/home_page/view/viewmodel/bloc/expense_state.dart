@@ -1,6 +1,4 @@
 
-
-import 'package:expense_app_bloc/core/models/expense_model.dart';
 import 'package:expense_app_bloc/features/home_page/model/filtered_exp_model.dart';
 
 abstract class ExpenseState {
@@ -15,8 +13,9 @@ class ExpenseLoadingState extends ExpenseState {
 
 class ExpenseSuccessState extends ExpenseState {
   final List<FilteredExpModel> mExpenses;
+  final double totalBalance;
 
-  const ExpenseSuccessState({required this.mExpenses });
+  const ExpenseSuccessState({required this.mExpenses,required this.totalBalance});
 }
 
 class ExpenseFailureState extends ExpenseState {

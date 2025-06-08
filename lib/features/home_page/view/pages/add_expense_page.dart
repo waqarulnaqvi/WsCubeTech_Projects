@@ -23,7 +23,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
   int selectedCatIndex = -1;
   List<String> mExpType = ["Debit", "Credit"];
   String selectedExpType = "Debit";
-  bool isLoading=false;
+  bool isLoading = false;
 
   DateTime? selectedDate;
   DateFormat dateFormat = DateFormat.yMMMEd();
@@ -249,16 +249,14 @@ class _AddExpensePageState extends State<AddExpensePage> {
 
               spacerH(),
 
-
-              BlocListener<ExpenseBloc, ExpenseState>(listener: (_, state) {
-                if( state is ExpenseLoadingState) {
-                  isLoading = true;
-                  print("Expense is loading");
-                  setState(() {});
-                }
-                else if(state is ExpenseFailureState)
-                  {
-                    print("Expense failed");
+              BlocListener<ExpenseBloc, ExpenseState>(
+                listener: (_, state) {
+                  if (state is ExpenseLoadingState) {
+                    isLoading = true;
+                    // print("Expense is loading");
+                    setState(() {});
+                  } else if (state is ExpenseFailureState) {
+                    // print("Expense failed");
                     isLoading = false;
                     setState(() {});
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -267,14 +265,12 @@ class _AddExpensePageState extends State<AddExpensePage> {
                         backgroundColor: Colors.red,
                       ),
                     );
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.error)));
-                  }
-                else if(state is ExpenseSuccessState)
-                  {
-                    print("Expense added successfully");
-                    isLoading =false;
-                    setState(() {
-                    });
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(content: Text(state.error)));
+                  } else if (state is ExpenseSuccessState) {
+                    // print("Expense added successfully");
+                    isLoading = false;
+                    setState(() {});
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text("Expense added successfully"),
@@ -283,95 +279,99 @@ class _AddExpensePageState extends State<AddExpensePage> {
                     );
                     Navigator.pop(context);
                   }
+                },
+                child: SizedBox(
+                    height: 50,
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: selectedCatIndex >= 0 &&
+                              selectedExpType.isNotEmpty
+                          ? () {
+                              if (_formKey.currentState!.validate()) {
+                                context
+                                    .read<ExpenseBloc>()
+                                    .add(AddingExpenseEvent(
+                                      model: ExpenseModel(
+                                          title: titleController.text,
+                                          description:
+                                              descriptionController.text,
+                                          amount: double.parse(
+                                              amountController.text),
+                                          balance: double.parse(
+                                              amountController.text),
+                                          categoryId: selectedCatIndex >= 0
+                                              ? AppConstants
+                                                      .mCat[selectedCatIndex]
+                                                  ["catId"]
+                                              : 0,
+                                          type: selectedExpType == "Debit"
+                                              ? 1
+                                              : 2,
+                                          createdAt:
+                                              (selectedDate ?? DateTime.now())
+                                                  .millisecondsSinceEpoch
+                                                  .toString()),
+                                    ));
+                                // createdAt: dateFormat.format(
+                                //                 selectedDate ?? DateTime.now()))));
+                              }
 
-
-              },child: SizedBox(
-                  height: 50,
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: selectedCatIndex >= 0 &&
-                        selectedExpType.isNotEmpty
-                        ? () {
-                      if (_formKey.currentState!.validate()) {
-                        context
-                            .read<ExpenseBloc>()
-                            .add(AddingExpenseEvent(
-                          model: ExpenseModel(
-                              title: titleController.text,
-                              description: descriptionController.text,
-                              amount:
-                              double.parse(amountController.text),
-                              balance:
-                              double.parse(amountController.text),
-                              categoryId: selectedCatIndex >= 0
-                                  ? AppConstants
-                                  .mCat[selectedCatIndex]["catId"]
-                                  : 0,
-                              type:
-                              selectedExpType == "Debit" ? 1 : 2,
-                              createdAt:
-                              (selectedDate ?? DateTime.now())
-                                  .millisecondsSinceEpoch
-                                  .toString()),
-                        ));
-                        // createdAt: dateFormat.format(
-                        //                 selectedDate ?? DateTime.now()))));
-                      }
-
-                      ///exp model
-                      ///bloc
-                      ///event
-                      ///state
-                      ///dbHelper
-                    }
-                        : () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content:
-                          Text("Please fill all fields correctly"),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        // elevation: 0,
-                        // backgroundColor: Colors.transparent,
-                        shadowColor: Colors.transparent,
-                        backgroundColor:
-                        // titleController.text.isNotEmpty &&
-                        //         descriptionController.text.isNotEmpty &&
-                        //         amountController.text.isNotEmpty &&
-                        //         selectedCatIndex >= 0 &&
-                        //         selectedExpType.isNotEmpty
-                        //     ?
-                        Colors.deepPurple
-                        // : Colors.grey
-                        ,
-                        // splashFactory: NoSplash.splashFactory, // Remove splash effect
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(color: Colors.black, width: 1),
-                          borderRadius: BorderRadius.circular(10),
-                        )),
-                    // .copyWith(
-                    // overlayColor: MaterialStateProperty.all(Colors.transparent),
-                    // ),
-                    child: isLoading? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                         height: 25,
-                          width: 25,
-                          child: CircularProgressIndicator(
-
-                            color: Colors.white,
-                          ),
-                        ),
-                        spacerW(),
-                        Text("Adding Expense...")
-                      ],
-                    ) :Text("Add Expense"),
-                  )) ,)
+                              ///exp model
+                              ///bloc
+                              ///event
+                              ///state
+                              ///dbHelper
+                            }
+                          : () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content:
+                                      Text("Please fill all fields correctly"),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            },
+                      style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          // elevation: 0,
+                          // backgroundColor: Colors.transparent,
+                          shadowColor: Colors.transparent,
+                          backgroundColor:
+                              // titleController.text.isNotEmpty &&
+                              //         descriptionController.text.isNotEmpty &&
+                              //         amountController.text.isNotEmpty &&
+                              //         selectedCatIndex >= 0 &&
+                              //         selectedExpType.isNotEmpty
+                              //     ?
+                              Colors.deepPurple
+                          // : Colors.grey
+                          ,
+                          // splashFactory: NoSplash.splashFactory, // Remove splash effect
+                          shape: RoundedRectangleBorder(
+                            side: BorderSide(color: Colors.black, width: 1),
+                            borderRadius: BorderRadius.circular(10),
+                          )),
+                      // .copyWith(
+                      // overlayColor: MaterialStateProperty.all(Colors.transparent),
+                      // ),
+                      child: isLoading
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  height: 25,
+                                  width: 25,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                spacerW(),
+                                Text("Adding Expense...")
+                              ],
+                            )
+                          : Text("Add Expense"),
+                    )),
+              )
             ],
           ),
         ),

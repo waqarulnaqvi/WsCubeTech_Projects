@@ -98,7 +98,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
         }
 
         if (eachCatExp.isNotEmpty) {
-        // if (count > 0) {
+          // if (count > 0) {
           filteredExpenses.add(FilteredExpModel(
               title: eachCat['catName'], bal: bal, allExp: eachCatExp));
         }
@@ -115,6 +115,10 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
       List<ExpenseModel> expenses = await dbHelper.fetchAllExpenses();
       if (expenses.isNotEmpty) {
         emit(ExpenseSuccessState(
+            totalBalance: expenses.fold(
+                0,
+                (sum, item) =>
+                    sum + (item.type == 1 ? -item.amount : item.amount)),
             mExpenses:
                 filterExpense(mExp: expenses, filterType: event.filterType)));
       } else {
@@ -129,9 +133,13 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
       if (isAdded) {
         List<ExpenseModel> expenses = await dbHelper.fetchAllExpenses();
         emit(ExpenseSuccessState(
+            totalBalance: expenses.fold(
+                0,
+                (sum, item) =>
+                    sum + (item.type == 1 ? -item.amount : item.amount)),
             mExpenses: filterExpense(
-          mExp: expenses,
-        )));
+              mExp: expenses,
+            )));
       } else {
         emit(ExpenseFailureState(error: "Failed to add expense"));
       }
@@ -143,7 +151,12 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
       bool isUpdated = await dbHelper.updateExpense(expense: event.model);
       if (isUpdated) {
         List<ExpenseModel> expenses = await dbHelper.fetchAllExpenses();
-        emit(ExpenseSuccessState(mExpenses: filterExpense(mExp: expenses)));
+        emit(ExpenseSuccessState(
+            totalBalance: expenses.fold(
+                0,
+                (sum, item) =>
+                    sum + (item.type == 1 ? -item.amount : item.amount)),
+            mExpenses: filterExpense(mExp: expenses)));
       } else {
         emit(ExpenseFailureState(error: "Failed to update expense"));
       }
@@ -155,7 +168,12 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
       bool isDeleted = await dbHelper.deleteExpense(expenseId: event.expenseId);
       if (isDeleted) {
         List<ExpenseModel> expenses = await dbHelper.fetchAllExpenses();
-        emit(ExpenseSuccessState(mExpenses: filterExpense(mExp: expenses)));
+        emit(ExpenseSuccessState(
+            totalBalance: expenses.fold(
+                0,
+                (sum, item) =>
+                    sum + (item.type == 1 ? -item.amount : item.amount)),
+            mExpenses: filterExpense(mExp: expenses)));
       } else {
         emit(ExpenseFailureState(error: "Failed to delete expense"));
       }

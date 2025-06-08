@@ -244,8 +244,8 @@ class _HomePageState extends State<HomePage> {
                               ),
                               SizedBox(height: 3),
                               Text(
-                                "\$",
-                                // "\$ ${totalExpense==0? "0,0" : totalExpense.toString()}",
+                                // "\$ ${state.totalBalance} ",
+                                "\$ ${state.totalBalance==0? "0,0" : state.totalBalance.toStringAsFixed(2)}",
                                 style: TextStyle(
                                   fontSize: 35,
                                   fontWeight: FontWeight.w500,
@@ -342,6 +342,7 @@ class _HomePageState extends State<HomePage> {
                                     var eachExpense =
                                     allDate[index].allExp[index2];
                                     return _buildExpenseItem(
+                                      eachExpense.type==1? true : false,
                                       AppConstants.mCat.firstWhere(
                                         //First where is a higher order function in flutter
                                               (element) =>
@@ -383,6 +384,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildExpenseItem(
+      bool isExpense,
       String image, String title, String desc, String amount) {
     return ListTile(
       leading: CircleAvatar(
@@ -402,10 +404,10 @@ class _HomePageState extends State<HomePage> {
       subtitle: Text(desc),
       trailing: Text(
         amount,
-        style: const TextStyle(
+        style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 14,
-          color: Color(0XFFE88DBE),
+          color: !isExpense? Colors.green :Colors.red,
         ),
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:expense_app_bloc/features/home_page/view/pages/first_page.dart';
 import 'package:expense_app_bloc/features/home_page/view/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import '../../pages/add_expense_page.dart';
@@ -14,7 +15,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   List<Widget> pages = [
      HomePage(),
-    const Center(child: Text('Statistics')),
+    FirstPage(),
     const AddExpensePage(),
     const Center(child: Text('Notifications')),
     const Center(child: Text('Profile')),
