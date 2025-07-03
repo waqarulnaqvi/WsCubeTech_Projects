@@ -22,43 +22,43 @@ class HomeBloc extends Bloc<HomeEvents, HomeState> {
         GetCuratedPhotosEvent event, Emitter<HomeState> emit) async {
       try {
         emit(state.copyWith(
-            isLoading: true));
+            isLoadingCuratedPhotos: true));
         final CuratedPhotos? getCuratedPhotos = await apiServices.getCuratedPhoto();
         if(getCuratedPhotos!=null)
           {
             emit(state.copyWith(curatedPhotos: getCuratedPhotos));
           }else
           {
-            emit(state.copyWith(errorMessage: "No curated photos found"));
+            emit(state.copyWith(errorMessageGetCuratedDetails: "No curated photos found"));
           }
       } catch (e) {
-        emit(state.copyWith(errorMessage: e.toString()));
+        emit(state.copyWith(errorMessageGetCuratedDetails: e.toString()));
       }
     }
 
     Future<void> _getSearchByPhotosEvent(
         GetSearchByPhotosEvent event, Emitter<HomeState> emit) async {
       try {
-        emit(state.copyWith(isLoading: true));
+        emit(state.copyWith(isLoadingSearchByPhotos: true));
         final List<SearchByPhotos> searchByPhotos =
             await apiServices.searchByPhotos(searchQuery: event.searchQuery);
 
-        print("Search by photos result: $searchByPhotos");
+        // print("Search by photos result: $searchByPhotos");
         if (searchByPhotos.isNotEmpty) {
           emit(state.copyWith(searchByPhotos: searchByPhotos));
         } else {
-          emit(state.copyWith(errorMessage: "No photos found for the search query"));
+          emit(state.copyWith(errorMessageGetSearchDetails: "No photos found for the search query"));
         }
       }
       catch (e) {
-        emit(state.copyWith(errorMessage: e.toString()));
+        emit(state.copyWith(errorMessageGetSearchDetails: e.toString()));
       }
     }
 
     Future<void> _getPhotoDetailsEvent(
         GetPhotoDetailsEvent event, Emitter<HomeState> emit) async {
       try {
-        emit(state.copyWith(isLoading: true,changePhotoIndex: int.parse(event.photoId)));
+        emit(state.copyWith(isLoadingGetPhotoDetails: true,changePhotoIndex: int.parse(event.photoId)));
         final Photo? photoDetails = await apiServices.getPhotoDetails(photoId: event.photoId.toString());
        // print("Get a Photo");
        // print(photoDetails);
@@ -66,10 +66,10 @@ class HomeBloc extends Bloc<HomeEvents, HomeState> {
 
           emit(state.copyWith(getPhotoDetails: photoDetails));
         } else {
-          emit(state.copyWith(errorMessage: "No photo details found for the given ID"));
+          emit(state.copyWith(errorMessageGetPhotoDetails: "No photo details found for the given ID"));
         }
       } catch (e) {
-        emit(state.copyWith(errorMessage: e.toString()));
+        emit(state.copyWith(errorMessageGetPhotoDetails: e.toString()));
       }
     }
 

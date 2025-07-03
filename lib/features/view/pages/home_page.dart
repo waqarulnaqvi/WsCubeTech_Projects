@@ -1,11 +1,9 @@
-import 'dart:math';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:wallpaper_app_ui_homework/features/viewmodel/bloc/home_bloc/home_bloc.dart';
 import 'package:wallpaper_app_ui_homework/shared/view/widgets/global_widget.dart';
-
 import '../../viewmodel/bloc/home_bloc/home_events.dart';
 import '../../viewmodel/bloc/home_bloc/home_state.dart';
 import 'nature.dart';
@@ -91,12 +89,12 @@ class _HomePageState extends State<HomePage> {
               if(showResults)
               BlocBuilder<HomeBloc, HomeState>(
                   builder: (context, state) {
-                    if (state.isLoading) {
+                    if (state.isLoadingSearchByPhotos) {
                       return const Center(child: CircularProgressIndicator());
                     }
 
-                    if (state.errorMessage != null) {
-                      return Center(child: Text("Error: ${state.errorMessage}"));
+                    if (state.errorMessageGetSearchDetails != null) {
+                      return Center(child: Text("Error: ${state.errorMessageGetSearchDetails}"));
                     }
 
 
@@ -132,13 +130,13 @@ class _HomePageState extends State<HomePage> {
               ),
               BlocBuilder<HomeBloc, HomeState>(
                 builder: (context, state) {
-                  if (state.isLoading) {
+                  if (state.isLoadingCuratedPhotos) {
                     return const Center(child: CircularProgressIndicator());
                   }
 
-                  // if (state.errorMessage != null) {
-                  //   return Center(child: Text("Error: ${state.errorMessage}"));
-                  // }
+                  if (state.errorMessageGetCuratedDetails != null) {
+                    return Center(child: Text("Error: ${state.errorMessageGetCuratedDetails}"));
+                  }
 
                   return SizedBox(
                     height: 230,
@@ -152,10 +150,22 @@ class _HomePageState extends State<HomePage> {
                           width: 140,
                           margin: const EdgeInsets.symmetric(
                               horizontal: 8, vertical: 10),
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: NetworkImage(c.src.original), fit: BoxFit.cover),
+                          // decoration: BoxDecoration(
+                          //   image: DecorationImage(
+                          //       image: NetworkImage(c.src.original), fit: BoxFit.cover),
+                          //   borderRadius: BorderRadius.circular(20),
+                          // ),
+                          child: ClipRRect(
                             borderRadius: BorderRadius.circular(20),
+                            child: CachedNetworkImage(
+                              imageUrl: c.src.original,
+                              errorWidget: (context, url, error) => const Icon(Icons.error, color: Colors.red, size: 30,),
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) => const Center(
+                                  child: CircularProgressIndicator(
+                                color: Colors.white,
+                              )),
+                            ),
                           ),
                         );
                       },
@@ -174,13 +184,13 @@ class _HomePageState extends State<HomePage> {
               ),
               BlocBuilder<HomeBloc, HomeState>(
                   builder: (context, state) {
-                    if (state.isLoading) {
+                    if (state.isLoadingCuratedPhotos) {
                       return const Center(child: CircularProgressIndicator());
                     }
 
-                    // if (state.errorMessage != null) {
-                    //   return Center(child: Text("Error: ${state.errorMessage}"));
-                    // }
+                    if (state.errorMessageGetCuratedDetails != null) {
+                      return Center(child: Text("Error: ${state.errorMessageGetCuratedDetails}"));
+                    }
 
                     return SizedBox(
                     height: 70,
@@ -215,13 +225,13 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               BlocBuilder<HomeBloc, HomeState>(builder: (context, state) {
-                if (state.isLoading) {
+                if (state.isLoadingCuratedPhotos) {
                   return const Center(child: CircularProgressIndicator());
                 }
 
-                // if (state.errorMessage != null) {
-                //   return Center(child: Text("Error: ${state.errorMessage}"));
-                // }
+                if (state.errorMessageGetCuratedDetails != null) {
+                  return Center(child: Text("Error: ${state.errorMessageGetCuratedDetails}"));
+                }
 
                 return GridView.builder(
                   shrinkWrap: true,
@@ -234,8 +244,8 @@ class _HomePageState extends State<HomePage> {
                     return Container(
                       margin: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: NetworkImage(c.src.original), fit: BoxFit.cover),
+                        // image: DecorationImage(
+                        //     image: NetworkImage(c.src.original), fit: BoxFit.cover),
                         borderRadius: BorderRadius.circular(15),
                       ),
                       // foregroundDecoration: BoxDecoration(
@@ -244,6 +254,22 @@ class _HomePageState extends State<HomePage> {
                       // ),
                       child: Stack(
                         children: [
+                          Positioned.fill(child: ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: CachedNetworkImage(
+                              imageUrl: c.src.original,
+                              errorWidget: (context, url, error) => const Icon(Icons.error, color: Colors.red, size: 30,),
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) => const Center(
+                                  child: CircularProgressIndicator(
+                                color: Colors.white,
+                              )
+                            ),
+                          ),),
+                          ),
+
+
+
                           Container(
                             decoration: BoxDecoration(
                               color: Colors.black.withValues(alpha: 0.12),

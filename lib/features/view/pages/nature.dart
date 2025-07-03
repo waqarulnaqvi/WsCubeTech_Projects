@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -57,12 +58,12 @@ class _NatureState extends State<Nature> {
                   spacerH(25),
                   BlocBuilder<HomeBloc, HomeState>(
                       builder: (context, state) {
-                        if (state.isLoading) {
+                        if (state.isLoadingSearchByPhotos) {
                           return const Center(child: CircularProgressIndicator());
                         }
 
-                        if (state.errorMessage != null) {
-                          return Center(child: Text("Error: ${state.errorMessage}"));
+                        if (state.errorMessageGetSearchDetails != null) {
+                          return Center(child: Text("Error: ${state.errorMessageGetSearchDetails}"));
                         }
 
 
@@ -103,14 +104,18 @@ class WallpaperTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(15),
-      child: Container(
+      child: SizedBox(
         height: ( index==0 || isLastIndex )?220: 280,
         width: double.infinity,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: NetworkImage(imageUrl),
-            fit: BoxFit.cover,
-          ),
+        // decoration: BoxDecoration(
+          // image: DecorationImage(
+          //   image: NetworkImage(imageUrl),
+          //   fit: BoxFit.cover,
+          // ),
+        child: CachedNetworkImage(imageUrl: imageUrl,
+          fit: BoxFit.cover,
+          placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+          errorWidget: (context, url, error) => const Icon(Icons.error, color: Colors.red, size: 30,),
         ),
       )
     );

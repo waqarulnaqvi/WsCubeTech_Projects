@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wallpaper_app_ui_homework/features/viewmodel/bloc/home_bloc/home_events.dart';
@@ -31,72 +32,78 @@ class _ShowWallpaperState extends State<ShowWallpaper> {
     return Scaffold(
       body: BlocBuilder<HomeBloc, HomeState>(
         builder: (context, state) {
-          if (state.isLoading) {
+          if (state.isLoadingGetPhotoDetails) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          // if (state.errorMessage != null) {
-          //   return Center(child: Text("Error: ${state.errorMessage}"));
-          // }
+          if (state.errorMessageGetPhotoDetails != null) {
+            return Center(child: Text("Error: ${state.errorMessageGetPhotoDetails}"));
+          }
 
           String photo = state.getPhotoDetails?.src.portrait??'';
 
-          return Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: NetworkImage(photo),
+          return Stack(
+
+
+            children: [
+              Positioned.fill(child:
+              CachedNetworkImage(
+                imageUrl: photo,
+                errorWidget: (context, url, error) => const Icon(Icons.error, color: Colors.red, size: 30,),
                 fit: BoxFit.cover,
+                placeholder: (context, url) => const Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                    )
+                ),
               ),
-            ),
-            child: Stack(
+              ),
 
 
-              children: [
-                Align(alignment: Alignment.center,
+              Align(alignment: Alignment.center,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  spacerW(),
+                  InkWell(
+                      onTap : (){
+                        indexP = (indexP - 1).clamp(300, 450);
+                        setState(() {
+
+                        });
+                        context.read<HomeBloc>().add(GetPhotoDetailsEvent(photoId: indexP.toString()));
+                      } ,
+                      child: Icon(Icons.arrow_back_ios_new, color:indexP>300? Colors.white: Colors.grey, size: 30,)),
+                  Spacer(),
+                  InkWell(
+                      onTap:(){
+                        indexP = (indexP + 1).clamp(300, 450);
+
+                        setState(() {
+                        });
+                        // context.read<HomeBloc>().add(ChangePhotoIndexEvent(index:newIndex));
+                        // print("Change Photo Index: ${state.changePhotoIndex}");
+                        context.read<HomeBloc>().add(GetPhotoDetailsEvent(photoId: indexP.toString()));
+                      } ,
+                      child: Icon(Icons.arrow_forward_ios, color:indexP<450? Colors.white: Colors.grey, size: 30,)),
+                  spacerW(),
+                ],
+              ),),
+
+              Align(alignment: Alignment.bottomCenter,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    spacerW(),
-                    InkWell(
-                        onTap : (){
-                          indexP = (indexP - 1).clamp(300, 450);
-                          setState(() {
-
-                          });
-                          context.read<HomeBloc>().add(GetPhotoDetailsEvent(photoId: indexP.toString()));
-                        } ,
-                        child: Icon(Icons.arrow_back_ios_new, color:indexP>300? Colors.white: Colors.grey, size: 30,)),
-                    Spacer(),
-                    InkWell(
-                        onTap:(){
-                          indexP = (indexP + 1).clamp(300, 450);
-
-                          setState(() {
-                          });
-                          // context.read<HomeBloc>().add(ChangePhotoIndexEvent(index:newIndex));
-                          // print("Change Photo Index: ${state.changePhotoIndex}");
-                          context.read<HomeBloc>().add(GetPhotoDetailsEvent(photoId: indexP.toString()));
-                        } ,
-                        child: Icon(Icons.arrow_forward_ios, color:indexP<450? Colors.white: Colors.grey, size: 30,)),
-                    spacerW(),
+                    reusableButton(),
+                    spacerW(30),
+                    reusableButton(icon: Icons.download, text: "Save"),
+                    spacerW(30),
+                    reusableButton(icon: Icons.brush_sharp,
+                        text: "Apply",
+                        color: Colors.blueAccent),
                   ],
                 ),),
-
-                Align(alignment: Alignment.bottomCenter,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      reusableButton(),
-                      spacerW(30),
-                      reusableButton(icon: Icons.download, text: "Save"),
-                      spacerW(30),
-                      reusableButton(icon: Icons.brush_sharp,
-                          text: "Apply",
-                          color: Colors.blueAccent),
-                    ],
-                  ),),
-              ],
-            ),
+            ],
           );
         },
       ),
